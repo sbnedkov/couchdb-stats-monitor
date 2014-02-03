@@ -1,0 +1,21 @@
+{
+  "name": "couchdb-stats-monitor",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "underscore": "latest",
+    "rest": "~1.0.0",
+	"metriks": "~0.0.2"
+  },
+  "devDependencies": {
+    "gulp": "~3.4.0",
+    "gulp-util": "~2.2.14",
+    "gulp-rename": "~0.2.2",
+    "gulp-if": "~0.0.4",
+    "gulp-jshint": "~1.3.4",
+    "jshint": "~2.4.1",
+    "jshint-stylish": "~0.1.5",
+    "jshint-tap": "0.0.1",
+    "mocha": "~1.17.1"
+  }
+}
