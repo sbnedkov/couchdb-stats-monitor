@@ -1,11 +1,11 @@
 var express = require('express');
-var cdbsm = require('./cdbsm');
+var cdbclient = require('./couchdb-client');
 
 var app = express();
-var monitor = cdbsm();
+var client = cdbclient();
 
 app.get('/', function (req, res) {
-    monitor.connect(function (stats) {
+    client.connect(function (stats) {
         res.send(stats);
     });
 });

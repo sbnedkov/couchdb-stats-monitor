@@ -1,11 +1,11 @@
 var assert = require('assert')
-var cdbsm = require('../src/cdbsm');
+var cdbclient = require('../src/couchdb-client');
 
-describe('cdbsm', function () {
+describe('couchdb-client', function () {
     describe('#connect', function () {
         it('should connect without error', function (done) {
-            monitor = cdbsm();
-            monitor.connect(function (response) {
+            client = cdbclient();
+            client.connect(function (response) {
                 done();
             });
         });

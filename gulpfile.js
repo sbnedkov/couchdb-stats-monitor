@@ -1,5 +1,7 @@
 var fs = require('fs');
 var spawn = require('child_process').spawn;
+var service = require('./src/service')();
+
 var gulp = require('gulp');
 var gutil = require('gulp-util');
 var gulpif = require('gulp-if');
@@ -7,7 +9,7 @@ var rename = require('gulp-rename');
 var jshint = require('gulp-jshint');
 
 var optionsFile = './couchdb-stats-monitor.json';
-var scriptFiles = './src/**/*.js';
+var scriptFiles = './**/*.js';
 
 gulp.task('copy-config', function() {
     fs.stat(optionsFile, function (err, stat) {
@@ -23,9 +25,21 @@ gulp.task('test', function() {
     spawn('mocha', ['test'], {stdio: 'inherit'});
 });
 
+gulp.task('start-daemon', function () {
+    service.start();
+});
+
+gulp.task('stop-daemon', function () {
+    service.stop();
+});
+
 gulp.task('default', function() {
     gulp.run('copy-config', 'test');
     gulp.watch(scriptFiles, function() {
         gulp.run('test');
     });
+});
+
+gulp.task('test-env', function() {
+    gulp.run('default', 'start-daemon');    
 });
