@@ -17,15 +17,15 @@ gulp.task('copy-config', function() {
     });    
 });
 
-gulp.task('test', function(){
+gulp.task('test', function() {
     gulp.src(scriptFiles).pipe(jshint());
 
     spawn('mocha', ['test'], {stdio: 'inherit'});
 });
 
-gulp.task('default', function(){
+gulp.task('default', function() {
     gulp.run('copy-config', 'test');
-    gulp.watch(scriptFiles, function(){
+    gulp.watch(scriptFiles, function() {
         gulp.run('test');
     });
 });

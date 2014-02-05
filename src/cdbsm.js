@@ -8,7 +8,7 @@ module.exports = function () {
 
     function connect (callback) {
         rest(['http://', options.host, ':', options.port, '/_stats'].join('')).then(function (response) {
-            callback(response);
+            callback(response.entity);
         });
     }
 }
