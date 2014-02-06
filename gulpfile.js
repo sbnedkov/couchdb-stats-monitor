@@ -7,6 +7,7 @@ var gutil = require('gulp-util');
 var gulpif = require('gulp-if');
 var rename = require('gulp-rename');
 var jshint = require('gulp-jshint');
+var wait = require('gulp-wait');
 
 var optionsFile = './couchdb-stats-monitor.json';
 var scriptFiles = './**/*.js';
@@ -26,11 +27,20 @@ gulp.task('test', function() {
 });
 
 gulp.task('start-daemon', function () {
-    service.start();
+    service.start(function (err) {
+        if (err) {
+            console.log(err);
+        }
+    });
+    wait();
 });
 
 gulp.task('stop-daemon', function () {
-    service.stop();
+    service.stop(function (err) {
+        if (err) {
+            console.log(err);
+        }
+    });
 });
 
 gulp.task('default', function() {
@@ -42,4 +52,9 @@ gulp.task('default', function() {
 
 gulp.task('test-env', function() {
     gulp.run('default', 'start-daemon');    
+});
+
+gulp.task('init', function () {
+    gulp.src('./db/cdbsm.rrd')
+        .pipe(gulp.dest(process.env['HOME'] + '/.cdbsm/'));
 });

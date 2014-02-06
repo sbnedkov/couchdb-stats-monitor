@@ -1,6 +1,5 @@
 {
     "nodeBinary": "/usr/bin/node",
 	"host": "localhost",
-	"port": 5984,
-	"pollInterval": 5000
+	"port": 5984
 }

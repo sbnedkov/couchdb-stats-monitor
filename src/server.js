@@ -1,8 +1,7 @@
 var express = require('express');
-var cdbclient = require('./couchdb-client');
+var client = require('./couchdb-client')();
 
 var app = express();
-var client = cdbclient();
 
 app.get('/', function (req, res) {
     client.connect(function (stats) {
