@@ -1,6 +1,6 @@
 var fs = require('fs');
 var spawn = require('child_process').spawn;
-var service = require('./src/service')();
+var plugin = require('./src/metriks-plugin')();
 
 var gulp = require('gulp');
 var gutil = require('gulp-util');
@@ -26,20 +26,13 @@ gulp.task('test', function() {
     spawn('mocha', ['test'], {stdio: 'inherit'});
 });
 
-gulp.task('start-daemon', function () {
-    service.start(function (err) {
-        if (err) {
-            console.log(err);
-        }
-    });
-    wait();
-});
-
-gulp.task('stop-daemon', function () {
-    service.stop(function (err) {
-        if (err) {
-            console.log(err);
-        }
+gulp.task('start-plugin', function () {
+    plugin.register(function () {
+        plugin.reload(function () {
+            plugin.start();
+            console.log("Running Metriks plugin.");
+            wait();
+        });
     });
 });
 
@@ -51,10 +44,5 @@ gulp.task('default', function() {
 });
 
 gulp.task('test-env', function() {
-    gulp.run('default', 'start-daemon');    
-});
-
-gulp.task('init', function () {
-    gulp.src('./db/cdbsm.rrd')
-        .pipe(gulp.dest(process.env['HOME'] + '/.cdbsm/'));
+    gulp.run('default', 'start-plugin');
 });
