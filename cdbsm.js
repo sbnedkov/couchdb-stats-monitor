@@ -2,6 +2,6 @@
 
 var client = require('./src/couchdb-client')();
 
-client.connect(function (response) {
+client.stats(function (response) {
     console.log(parseInt(response['couchdb']['request_time']['current']));
 });

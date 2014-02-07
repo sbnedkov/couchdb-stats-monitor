@@ -1,6 +1,6 @@
 var fs = require('fs');
 var spawn = require('child_process').spawn;
-var plugin = require('./src/metriks-plugin')();
+var plugin = require('./src/metriks-wrapper')();
 
 var gulp = require('gulp');
 var gutil = require('gulp-util');
