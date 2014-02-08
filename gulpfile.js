@@ -26,7 +26,12 @@ gulp.task('test', function() {
     spawn('mocha', ['test'], {stdio: 'inherit'});
 });
 
-gulp.task('start-plugin', function () {
+gulp.task('start-server', function() {
+    spawn('node', ['./src/server.js'], {stdio: 'inherit'});
+});
+
+gulp.task('start', function () {
+    gulp.run('copy-config', 'start-server');
     plugin.register(function () {
         plugin.reload(function () {
             plugin.start();
@@ -36,13 +41,13 @@ gulp.task('start-plugin', function () {
     });
 });
 
+gulp.task('test-env', function() {
+    gulp.run('start');
+});
+
 gulp.task('default', function() {
-    gulp.run('copy-config', 'test');
+    gulp.run('test-env');
     gulp.watch(scriptFiles, function() {
         gulp.run('test');
     });
-});
-
-gulp.task('test-env', function() {
-    gulp.run('default', 'start-plugin');
 });

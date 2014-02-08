@@ -1,8 +1,8 @@
+var options = require('../couchdb-stats-monitor.json');
 var Plugin = require('metriks/lib/plugin').Plugin;
 var logger = require('simple-log').init('cdbsm');
 
 module.exports = function () {
-    var pollInterval = 5000;
     var plugin;
 
     return {
@@ -13,7 +13,7 @@ module.exports = function () {
 
     function register (callback) {
         var workdir = process.env['HOME'] + '/.cdbsm/';
-        var pluginFile = __dirname + '/../cdbsm.js';
+        var pluginFile = __dirname + '/../plugin/request_time.js';
         var rrdFile = workdir + 'cdbsm.rrd';
         var pngFile = workdir + 'cdbsm.png';
 
@@ -55,7 +55,7 @@ module.exports = function () {
 
     function loop () {
         run();
-        setTimeout(loop, pollInterval);
+        setTimeout(loop, options.pollInterval);
 
         function run () {
             plugin.run(function (err, res) {
