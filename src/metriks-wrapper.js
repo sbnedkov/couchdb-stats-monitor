@@ -43,7 +43,7 @@ module.exports = function () {
     function reload (callback) {
         plugin.reload(function (err, res) {
             if (err) {
-                logger(err);
+                logger.log(err);
             }
             callback();
         });
@@ -60,7 +60,7 @@ module.exports = function () {
         function run () {
             plugin.run(function (err, res) {
                 if (err) {
-                    logger(err);
+                    logger.log(err);
                 }
             });
         }
