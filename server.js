@@ -1,6 +1,6 @@
 var express = require('express');
-var client = require('./couchdb-client')();
-var service = require('./service')();
+var client = require('./src/couchdb-client')();
+var service = require('./src/couchdb-service')();
 
 var app = express();
 

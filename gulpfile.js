@@ -1,6 +1,5 @@
 var fs = require('fs');
-var spawn = require('child_process').spawn;
-var plugin = require('./src/metriks-wrapper')();
+var metriks = require('./src/metriks-wrapper')();
 
 var gulp = require('gulp');
 var gutil = require('gulp-util');
@@ -8,9 +7,12 @@ var gulpif = require('gulp-if');
 var rename = require('gulp-rename');
 var jshint = require('gulp-jshint');
 var wait = require('gulp-wait');
+var spawn = require('gulp-spawn');
+var mocha = require('gulp-mocha');
 
 var optionsFile = './couchdb-stats-monitor.json';
 var scriptFiles = './**/*.js';
+var testFiles = './test/**/*.js';
 
 gulp.task('copy-config', function() {
     fs.stat(optionsFile, function (err, stat) {
@@ -20,34 +22,32 @@ gulp.task('copy-config', function() {
     });    
 });
 
-gulp.task('test', function() {
-    gulp.src(scriptFiles).pipe(jshint());
+gulp.task('lint', function () {
+    return gulp.src(scriptFiles).pipe(jshint());
+});
 
-    spawn('mocha', ['test'], {stdio: 'inherit'});
+gulp.task('test', function() {
+    return gulp.src(testFiles).pipe(mocha());
+});
+
+gulp.task('start-metriks', function () {
+    metriks.start(['request_time', 'database_reads', 'database_writes']);
 });
 
 gulp.task('start-server', function() {
-    spawn('node', ['./src/server.js'], {stdio: 'inherit'});
+    return gulp.src('server.js')
+        .pipe(spawn({cmd: 'node', args: []}))
+        .pipe(wait());
 });
 
-gulp.task('start', function () {
-    gulp.run('copy-config', 'start-server');
-    plugin.register(function () {
-        plugin.reload(function () {
-            plugin.start();
-            console.log("Running Metriks plugin.");
-            wait();
-        });
-    });
-});
-
-gulp.task('test-env', function() {
-    gulp.run('start');
-});
-
-gulp.task('default', function() {
-    gulp.run('test-env');
+gulp.task('watch-files', ['copy-config', 'start-metriks'], function() {
     gulp.watch(scriptFiles, function() {
         gulp.run('test');
     });
+});
+
+gulp.task('default', ['watch-files', 'start-server'], function() {
+});
+
+gulp.task('test-env', ['lint', 'test', 'default'], function() {
 });
