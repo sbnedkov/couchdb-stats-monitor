@@ -31,7 +31,8 @@ gulp.task('test', function() {
 });
 
 gulp.task('start-metriks', function () {
-    metriks.start(['request_time', 'database_reads', 'database_writes']);
+    var options = require(optionsFile);
+    metriks.start(options.graphs || ['request_time', 'database_reads', 'database_writes']);
 });
 
 gulp.task('start-server', function() {

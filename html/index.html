@@ -1,0 +1,53 @@
+<html>
+    <body>
+        <ul>
+            <li>
+                <ul>
+                    <li id="graph1" style="display: inline;">
+                    </li>
+                    <li id="graph2" style="display: inline;">
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <ul>
+                    <li id="graph3" style="display: inline;">
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </body>
+    <script type="text/javascript">
+        function update () {
+
+            function updateGraph (li, statName) {
+                var img = new Image(500);
+                img.onload = function () {
+                    var images = li.getElementsByTagName('img');
+
+                    Array.prototype.forEach.call(images, function (img) {
+                        img.setAttribute('style', 'display: none;');
+                    });
+                    img.setAttribute('style', 'display: inline;');
+
+                    Array.prototype.forEach.call(images, function (img) {
+                        li.removeChild(img);
+                    });
+                    li.appendChild(img);
+                };
+                img.setAttribute('style', 'display: none;');
+                img.src = 'http://localhost:31313/graphs/' + statName + '?t=' + new Date().getTime();
+            }
+
+            updateGraph(document.getElementById('graph1'), 'request_time');
+            updateGraph(document.getElementById('graph2'), 'database_reads');
+            updateGraph(document.getElementById('graph3'), 'database_writes');
+
+            setTimeout(function () {
+                update();
+            }, 5000);
+        }
+
+        update();
+    </script>
+</html>

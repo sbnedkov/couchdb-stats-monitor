@@ -1,10 +1,18 @@
 var express = require('express');
+var fs = require('fs');
 var client = require('./src/couchdb-client')();
 var service = require('./src/couchdb-service')();
+var options = require('./couchdb-stats-monitor.json');
 
 var app = express();
 
+app.use(express.static(__dirname + '/html'));
+
 var lastStats;
+
+service.start(function (stats) {
+    lastStats = stats;
+});
 
 app.get('/stats/:group/:stat/:measure', function (req, res) {
     res.send({
@@ -12,8 +20,16 @@ app.get('/stats/:group/:stat/:measure', function (req, res) {
     });
 });
 
-service.start(function (stats) {
-    lastStats = stats;
+app.get('/graphs', function (req, res) {
+    res.send(options.graphs);
+});
+
+app.get('/graphs/:name', function (req, res) {
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Expires', new Date(0));
+    res.setHeader('Content-Type', 'image/png');
+    fs.createReadStream(process.env['HOME'] + '/.cdbsm/' + req.params.name + '.png')
+        .pipe(res);
 });
 
 app.listen(31313);
