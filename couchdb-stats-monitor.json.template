@@ -1,7 +1,20 @@
 {
     "nodeBinary": "/usr/bin/node",
-	"host": "localhost",
-	"port": 5984,
-	"pollInterval": 5000,
-	"graphs": ["request_time", "database_reads", "database_writes"]
+        "host": "localhost",
+        "port": 5984,
+        "pollInterval": 5000,
+        "graphs": [{
+                "name": "request_time",
+                "dataType": "COUNTER"
+        }, {
+                "name": "database_reads",
+                "dataType": "COUNTER"
+        }, {
+                "name": "database_writes",
+                "dataType": "COUNTER"
+        }, {
+                "name": "open_os_files",
+                "dataType": "GAUGE"
+        }]
 }
+

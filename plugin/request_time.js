@@ -1,3 +1,4 @@
 #!/usr/bin/env node
 
-require('../src/base-plugin').query('request time in millisecond', ['couchdb', 'request_time', 'current']);
+require('../src/base-plugin').query('request millis', ['couchdb', 'request_time', 'current']);
+

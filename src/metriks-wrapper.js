@@ -14,13 +14,19 @@ module.exports = function () {
 
     function register (ps, callback) {
         _.each(ps, function (plugin) {
+            var name = plugin.name;
             var workdir = process.env['HOME'] + '/.cdbsm/';
-            var pluginFile = __dirname + '/../plugin/' + plugin + '.js';
-            var rrdFile = workdir + plugin + '.rrd';
-            var pngFile = workdir + plugin + '.png';
+            var pluginFile = __dirname + '/../plugin/' + name + '.js';
+            var rrdFile = workdir + name + '.rrd';
+            var pngFile = workdir + name + '.png';
 
             plugins.push(new Plugin({
-                name: plugin,
+                name: name,
+                dataType: convertDataType(plugin.dataType),
+                step: 5,
+                samples: 17280,
+                graphType: convertGraphType(plugin.graphType),
+                graphSpan: 1800,
                 pluginFile: pluginFile,
                 rrdFile: rrdFile,
                 pngFile: pngFile,
@@ -39,7 +45,7 @@ module.exports = function () {
                 }
             }));
         });
-        callback();
+        callback(null);
     }
 
     function reload (callback) {
@@ -69,10 +75,37 @@ module.exports = function () {
     }
 
     function start (plugins) {
-        register(plugins, function () {
-            reload(function () {
-                loop();
-            });
+        register(options.graphs, function (err) {
+            if (err) {
+                    logger.log(err);
+            } else {
+                    reload(function () {
+                            loop();
+                    });
+            }
         });
     }
+
+    function convertDataType (dataType) {
+        switch (dataType) {
+            case 'COUNTER':
+                return Plugin.constants.rra.counter;
+            case 'GAUGE':
+                return Plugin.constants.rra.gauge;
+            default:
+                return Plugin.constants.rra.counter;
+        }
+    }
+
+    function convertGraphType (graphType) {
+        switch (graphType) {
+            case 'AREA':
+                return Plugin.constants.graph.area;
+            case 'LINE1':
+                return Plugin.constants.graph.line;
+            default:
+                return Plugin.constants.graph.area;
+        }
+    }
 };
+

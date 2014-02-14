@@ -5,9 +5,9 @@
   "dependencies": {
     "underscore": "latest",
     "rest": "~1.0.0",
-	"metriks": "~0.0.2",
-	"express": "3.x",
-	"simple-log": "~1.1.0"
+        "metriks": "~0.0.2",
+        "express": "3.x",
+        "simple-log": "~1.1.0"
   },
   "devDependencies": {
     "gulp": "~3.4.0",

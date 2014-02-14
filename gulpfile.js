@@ -31,8 +31,7 @@ gulp.task('test', function() {
 });
 
 gulp.task('start-metriks', function () {
-    var options = require(optionsFile);
-    metriks.start(options.graphs || ['request_time', 'database_reads', 'database_writes']);
+    metriks.start();
 });
 
 gulp.task('start-server', function() {
@@ -47,7 +46,7 @@ gulp.task('watch-files', ['copy-config', 'start-metriks'], function() {
     });
 });
 
-gulp.task('default', ['watch-files', 'start-server'], function() {
+gulp.task('default', ['copy-config', 'start-metriks', 'start-server'], function() {
 });
 
 gulp.task('test-env', ['lint', 'test', 'default'], function() {

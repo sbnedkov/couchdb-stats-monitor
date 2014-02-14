@@ -13,6 +13,8 @@
                 <ul>
                     <li id="graph3" style="display: inline;">
                     </li>
+                    <li id="graph4" style="display: inline;">
+                    </li>
                 </ul>
             </li>
         </ul>
@@ -42,6 +44,7 @@
             updateGraph(document.getElementById('graph1'), 'request_time');
             updateGraph(document.getElementById('graph2'), 'database_reads');
             updateGraph(document.getElementById('graph3'), 'database_writes');
+            updateGraph(document.getElementById('graph4'), 'open_os_files');
 
             setTimeout(function () {
                 update();
@@ -51,3 +54,4 @@
         update();
     </script>
 </html>
+
