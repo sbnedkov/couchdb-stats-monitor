@@ -1,6 +1,4 @@
 var fs = require('fs');
-var metriks = require('./src/metriks-wrapper')();
-
 var gulp = require('gulp');
 var gutil = require('gulp-util');
 var gulpif = require('gulp-if');
@@ -31,6 +29,8 @@ gulp.task('test', function() {
 });
 
 gulp.task('start-metriks', function () {
+    var metriks = require('./src/metriks-wrapper')();
+
     metriks.start();
 });
 
