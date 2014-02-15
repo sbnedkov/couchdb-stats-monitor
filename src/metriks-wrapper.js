@@ -108,6 +108,6 @@ module.exports = function () {
 //            default:
 //                return Plugin.constants.graph.area;
 //        }
-//    }
+    }
 };
 
