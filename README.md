@@ -1,22 +1,21 @@
 couchdb-stats-monitor
----------------------
+=====================
 
 A graph generator for monitoring CouchDB backed by RRD tool and built as a [Metriks](https://github.com/kvz/metriks) plugin.
 
-For now in order to run start an instance of CouchDB and execute:
+Instructions
+------------
+
+In order to install execute:
 
 ```shell
 npm install
 gulp copy-config
 ```
 
-You can edit
+You can edit *./couchdb-stats-monitor.json* to set a custom port.
 
-_couchdb-stats-monitor.json_
-
-to set a custom port.
-
-To start collecting data run:
+To start collecting data start CouchDB and run:
 ```shell
 gulp
 ```
