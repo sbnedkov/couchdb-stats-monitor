@@ -9,9 +9,6 @@ module.exports = {
 
 function query (name, stats) {
     rest('http://localhost:31313/stats/' + stats.join('/')).then(function (stat) {
-        console.log('# config.interval: ' + options.pollInterval / 1000);
-        console.log('# graph.title: ' + name);
-                console.log("# graph.verticalLabel: TODO");
         console.log(parseInt(JSON.parse(stat.entity).value));
     }, function (err) {
         logger.log(err);

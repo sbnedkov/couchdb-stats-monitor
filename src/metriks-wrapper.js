@@ -87,25 +87,27 @@ module.exports = function () {
     }
 
     function convertDataType (dataType) {
-        switch (dataType) {
-            case 'COUNTER':
-                return Plugin.constants.rra.counter;
-            case 'GAUGE':
-                return Plugin.constants.rra.gauge;
-            default:
-                return Plugin.constants.rra.counter;
-        }
+        return 'COUNTER';
+//        switch (dataType) {
+//            case 'COUNTER':
+//                return Plugin.constants.rra.counter;
+//            case 'GAUGE':
+//                return Plugin.constants.rra.gauge;
+//            default:
+//                return Plugin.constants.rra.counter;
+//        }
     }
 
     function convertGraphType (graphType) {
-        switch (graphType) {
-            case 'AREA':
-                return Plugin.constants.graph.area;
-            case 'LINE1':
-                return Plugin.constants.graph.line;
-            default:
-                return Plugin.constants.graph.area;
-        }
-    }
+        return 'AREA';
+//        switch (graphType) {
+//            case 'AREA':
+//                return Plugin.constants.graph.area;
+//            case 'LINE1':
+//                return Plugin.constants.graph.line;
+//            default:
+//                return Plugin.constants.graph.area;
+//        }
+//    }
 };
 
