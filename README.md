@@ -7,19 +7,20 @@ For now in order to run start an instance of CouchDB and execute:
 
 ```shell
 npm install
-gulp
+gulp copy-config
 ```
 
 You can edit
 
-```
-couchdb-stats-monitor.json
-```
+_couchdb-stats-monitor.json_
 
 to set a custom port.
 
+To start collecting data run:
+```shell
+gulp
+```
+
 Then you can access the monitor at:
 
-```
 http://localhost:31313/
-```
