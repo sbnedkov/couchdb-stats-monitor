@@ -1,8 +1,14 @@
+#!/bin/env node
+
+require('./src/logger')
+var logger = require('winston')
 var express = require('express');
 var fs = require('fs');
 var client = require('./src/couchdb-client')();
 var service = require('./src/couchdb-service')();
 var options = require('./couchdb-stats-monitor.json');
+
+const PORT = 31313;
 
 var app = express();
 
@@ -32,4 +38,4 @@ app.get('/graphs/:name', function (req, res) {
         .pipe(res);
 });
 
-app.listen(31313);
+app.listen(PORT, () => logger.log(`Server listening on ${PORT}.`));

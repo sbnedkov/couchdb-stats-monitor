@@ -1,6 +1,7 @@
+require('./logger')
+var logger = require('winston')
 var rest = require('rest');
 var options = require('../couchdb-stats-monitor.json');
-var logger = require('simple-log').init('cdbsm');
 
 module.exports = {
     query: query

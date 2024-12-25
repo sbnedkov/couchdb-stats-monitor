@@ -1,7 +1,7 @@
-var _ = require('underscore');
+require('./logger')
 var options = require('../couchdb-stats-monitor.json');
 var Plugin = require('metriks/lib/plugin').Plugin;
-var logger = require('simple-log').init('cdbsm');
+var logger = require('winston')
 
 module.exports = function () {
     var plugins = [];
@@ -13,7 +13,7 @@ module.exports = function () {
     };
 
     function register (ps, callback) {
-        _.each(ps, function (plugin) {
+        ps.forEach(function (plugin) {
             var name = plugin.name;
             var workdir = process.env['HOME'] + '/.cdbsm/';
             var pluginFile = __dirname + '/../plugin/' + name + '.js';
@@ -42,14 +42,15 @@ module.exports = function () {
                     info : function (str) {
                         console.log(str);
                     },
-                }
+                },
+                timeout: 1000
             }));
         });
         callback(null);
     }
 
     function reload (callback) {
-        _.each(plugins, function (plugin) {
+        plugins.forEach(function (plugin) {
             plugin.reload(function (err, res) {
                 if (err) {
                     logger.log(err);
@@ -64,7 +65,7 @@ module.exports = function () {
         setTimeout(loop, options.pollInterval);
 
         function run () {
-            _.each(plugins, function (plugin) {
+            plugins.forEach(function (plugin) {
                 plugin.run(function (err, res) {
                     if (err) {
                         logger.log(err);

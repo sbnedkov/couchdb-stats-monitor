@@ -1,53 +1,47 @@
-var fs = require('fs');
-var gulp = require('gulp');
+var fs = require('fs/promises');
+var execFile = require('child_process').execFile;
+var { dest, parallel, series, src, watch } = require('gulp');
 var gutil = require('gulp-util');
 var gulpif = require('gulp-if');
 var rename = require('gulp-rename');
 var jshint = require('gulp-jshint');
 var wait = require('gulp-wait');
-var spawn = require('gulp-spawn');
 var mocha = require('gulp-mocha');
 
 var optionsFile = './couchdb-stats-monitor.json';
 var scriptFiles = './**/*.js';
 var testFiles = './test/**/*.js';
 
-gulp.task('copy-config', function() {
-    fs.stat(optionsFile, function (err, stat) {
-        gulp.src('./couchdb-stats-monitor.json.template')
-            .pipe(gulpif(!stat || !stat.isFile(), rename(optionsFile)))
-            .pipe(gulpif(!stat || !stat.isFile(), gulp.dest('./')));
-    });    
-});
+const copyConfig = exports['copy-config'] = async function () {
+    const stat = await fs.stat(optionsFile);
+    return src('./couchdb-stats-monitor.json.template')
+        .pipe(gulpif(!stat || !stat.isFile(), rename(optionsFile)))
+        .pipe(gulpif(!stat || !stat.isFile(), dest('./')));
+}
 
-gulp.task('lint', function () {
+function lint () {
     return gulp.src(scriptFiles).pipe(jshint());
-});
+}
 
-gulp.task('test', function() {
-    return gulp.src(testFiles).pipe(mocha());
-});
+function test () {
+    return src(testFiles).pipe(mocha());
+}
 
-gulp.task('start-metriks', function () {
+function startMetriks () {
     var metriks = require('./src/metriks-wrapper')();
 
     metriks.start();
+}
+
+function startServer () {
+    return execFile('./server.js');
+}
+
+exports.watchFiles = series(copyConfig, startMetriks, function(cb) {
+    watch(scriptFiles, series(function() {
+        test();
+    }));
 });
 
-gulp.task('start-server', function() {
-    return gulp.src('server.js')
-        .pipe(spawn({cmd: 'node', args: []}))
-        .pipe(wait());
-});
-
-gulp.task('watch-files', ['copy-config', 'start-metriks'], function() {
-    gulp.watch(scriptFiles, function() {
-        gulp.run('test');
-    });
-});
-
-gulp.task('default', ['copy-config', 'start-metriks', 'start-server'], function() {
-});
-
-gulp.task('test-env', ['lint', 'test', 'default'], function() {
-});
+const dflt = exports.default = parallel(series(copyConfig, startMetriks), startServer);
+exports['test-env'] = series(lint, test, dflt);
